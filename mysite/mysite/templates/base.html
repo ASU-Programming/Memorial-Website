@@ -1,0 +1,30 @@
+
+
+<!DOCTYPE html>
+{% load static wagtailcore_tags breadcrumbs_tags %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Wagtail Site{% endblock %}</title>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header>
+        <h1>My Wagtail Site</h1>
+        <nav>
+            <!-- Add your navigation menu items here -->
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Wagtail Site (ariel-12345)</p>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load breadcrumbs_tags %}
+{% block title %}{{ page.title }} - {{ block.super }}{% endblock %}
+
+{% block content %}
+
+    <h1>{{ page.title }}</h1>
+{% breadcrumbs %}
+    <p>{{ page.intro }}</p>
+
+    <ul class="people-list">
+    {% for person in people %}
+        <li>
+            <a href="{% pageurl person %}">
+                {% if person.image %}
+                    {% image person.image fill-100x100 class="person-thumbnail" %}
+                {% endif %}
+                <span class="person-name">{{ person.title }}</span>
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

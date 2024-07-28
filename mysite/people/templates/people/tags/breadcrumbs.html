@@ -1,0 +1,10 @@
+{% load wagtailcore_tags %}
+
+{% if ancestors %}
+<div class="breadcrumbs">
+    {% for ancestor in ancestors %}
+        <a href="{% pageurl ancestor %}">{{ ancestor.title }}</a> &gt;
+    {% endfor %}
+    {{ current_page.title }}
+</div>
+{% endif %}

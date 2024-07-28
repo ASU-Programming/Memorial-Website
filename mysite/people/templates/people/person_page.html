@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+{% load wagtailcore_tags wagtailimages_tags %}
+{% load breadcrumbs_tags %}
+
+{% block extra_css %}
+
+<style>
+    .person-page {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+    .carousel {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+        margin-top: 20px;
+
+    }
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.5s ease;
+        background-color: #f0f0f0;
+    }
+    .carousel-item {
+        flex: 0 0 50%;
+        height: 300px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        background-color: #f0f0f0;
+
+    }
+    .carousel-item img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    .carousel-control {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0,0,0,0.5);
+        color: white;
+        padding: 10px;
+        text-decoration: none;
+        z-index: 10;
+    }
+    .carousel-control-prev {
+        left: 10px;
+    }
+    .carousel-control-next {
+        right: 10px;
+    }
+    .carousel-caption {
+        background: rgba(0,0,0,0.5);
+        padding: 5px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0;
+        text-align: center;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="person-page">
+    {% breadcrumbs %}
+    <h1>{{ page.title }}</h1>
+
+
+    <div class="person-info">
+        {% if page.image %}
+        {% image page.image max-300x300 class="profile-image" %}
+        {% endif %}
+
+        <div class="details">
+            {% if page.rank_or_title %}
+            <p class="rank">{{ page.rank_or_title }}</p>
+            {% endif %}
+
+            {% if page.unit_or_affiliation %}
+            <p class="unit">{{ page.unit_or_affiliation }}</p>
+            {% endif %}
+
+            {% if page.birth_date %}
+            <p class="birth-date">Born: {{ page.birth_date|date:"d.m.Y" }}</p>
+            {% endif %}
+
+            {% if page.death_date %}
+            <p class="death-date">Died: {{ page.death_date|date:"d.m.Y" }}</p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if page.description %}
+    <div class="biography">
+        {{ page.description|richtext }}
+    </div>
+    {% endif %}
+
+    {% if page.gallery_images.all %}
+    <div id="personCarousel" class="carousel">
+        <div class="carousel-inner">
+            {% for item in page.gallery_images.all %}
+            <div class="carousel-item">
+                {% image item.image max-400x300 %}
+                {% if item.caption %}
+                <div class="carousel-caption">
+                    <p>{{ item.caption }}</p>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        <a class="carousel-control carousel-control-prev" href="#" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true">&#10094;</span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control carousel-control-next" href="#" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true">&#10095;</span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const carousel = document.querySelector('#personCarousel');
+        const carouselInner = carousel.querySelector('.carousel-inner');
+        const items = carousel.querySelectorAll('.carousel-item');
+        const prevBtn = carousel.querySelector('.carousel-control-prev');
+        const nextBtn = carousel.querySelector('.carousel-control-next');
+        let currentIndex = 0;
+
+        function showItems(index) {
+            carouselInner.style.transform = `translateX(-${index * 50}%)`;
+        }
+
+        prevBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentIndex = Math.max(currentIndex - 2, 0);
+            showItems(currentIndex);
+        });
+
+        nextBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            currentIndex = Math.min(currentIndex + 2, items.length - 2);
+            showItems(currentIndex);
+        });
+
+        // Show the first two items initially
+        showItems(0);
+    });
+</script>
+{% endblock %}
