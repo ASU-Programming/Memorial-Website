@@ -4,21 +4,23 @@
 {% block title %}{{ page.title }} - {{ block.super }}{% endblock %}
 
 {% block content %}
+<div class="container mx-auto mt-10 p-4 bg-white shadow rounded-lg">
+    <h1 class="text-3xl font-bold mb-4 ">{{ page.title }}</h1>
+    {% breadcrumbs %}
 
-    <h1>{{ page.title }}</h1>
-{% breadcrumbs %}
-    <p>{{ page.intro }}</p>
+    <p class="mb-6 rtl:direction-rtl ">{{ page.intro }}</p>
 
-    <ul class="people-list">
-    {% for person in people %}
-        <li>
-            <a href="{% pageurl person %}">
+    <ul class="people-list grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
+        {% for person in people %}
+        <li class="bg-gray-100 p-4 rounded-lg shadow ">
+            <a href="{% pageurl person %}" class="flex items-center rtl:flex-row-reverse">
                 {% if person.image %}
-                    {% image person.image fill-100x100 class="person-thumbnail" %}
+                    {% image person.image fill-100x100 class="w-24 h-24 rounded-full" %}
                 {% endif %}
-                <span class="person-name">{{ person.title }}</span>
+                <span class="text-xl font-medium mr-4">{{ person.title }}</span>
             </a>
         </li>
-    {% endfor %}
+        {% endfor %}
     </ul>
+</div>
 {% endblock %}
